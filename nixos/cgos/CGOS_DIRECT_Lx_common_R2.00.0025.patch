@@ -1,0 +1,1082 @@
+diff --git a/CgosBld.h b/CgosBld.h
+index 6de3394..3432854 100644
+--- a/CgosBld.h
++++ b/CgosBld.h
+@@ -1,3 +1,3 @@
+ #ifndef CGOS_BUILD_NUMBER
+-#define CGOS_BUILD_NUMBER 24
++#define CGOS_BUILD_NUMBER 25
+ #endif
+diff --git a/CgosDrv/CgosDrv.c b/CgosDrv/CgosDrv.c
+index d75aae0..96e790c 100644
+--- a/CgosDrv/CgosDrv.c
++++ b/CgosDrv/CgosDrv.c
+@@ -207,7 +207,7 @@ unsigned int SetBoardGroup(CGOS_DRV_VARS *cdv)
+ #define df(oX,name,f0,f1,mi,mo) { xCgos##name,oX(name),mi,mo,CDFF_##f0|CDFF_##f1 }
+ 
+ CGOS_DRV_FCT DrvFcts[]={
+-  df(X,DrvGetVersion           ,THIS,x  ,0,0),		
++  df(X,DrvGetVersion           ,THIS,x  ,0,0),		//0
+   df(X,BoardClose              ,BRD ,x  ,0,0),
+   df(X,BoardCount              ,BRD ,x  ,0,0),
+   df(X,BoardOpen               ,BRD ,x  ,0,0),
+@@ -217,7 +217,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(X,BoardGetBootCounter     ,BRD ,x  ,0,0),
+   df(X,BoardGetRunningTimeMeter,BRD ,x  ,0,0),
+   df(o,BoardGetOption          ,BRD ,x  ,0,0),
+-  df(o,BoardSetOption          ,BRD ,x  ,0,0),		
++  df(o,BoardSetOption          ,BRD ,x  ,0,0),		//10
+   df(X,BoardGetBootErrorLog    ,BRD ,x  ,0,0),
+   df(X,VgaCount                ,VGA ,x  ,0,0),
+   df(X,VgaGetContrast          ,VGA ,x  ,0,0),
+@@ -227,7 +227,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(X,VgaGetBacklight         ,VGA ,x  ,0,0),
+   df(X,VgaSetBacklight         ,VGA ,x  ,0,0),
+   df(X,VgaGetBacklightEnable   ,VGA ,x  ,0,0),
+-  df(X,VgaSetBacklightEnable   ,VGA ,x  ,0,0),		
++  df(X,VgaSetBacklightEnable   ,VGA ,x  ,0,0),		//20
+   df(X,VgaEndDarkBoot          ,VGA ,x  ,0,0),
+   df(X,VgaGetInfo              ,VGA ,x  ,0,sizeof(CGOSVGAINFO)),
+   df(X,StorageAreaCount        ,STO ,x  ,0,0), // no STO type checks
+@@ -237,7 +237,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(X,StorageAreaRead         ,STO ,x  ,0,0),
+   df(X,StorageAreaWrite        ,STO ,x  ,0,0),
+   df(X,StorageAreaErase        ,STO ,x  ,0,0),
+-  df(X,StorageAreaEraseStatus  ,STO ,x  ,0,0),		
++  df(X,StorageAreaEraseStatus  ,STO ,x  ,0,0),		//30
+   df(X,I2CCount                ,I2C ,x  ,0,0),
+   df(X,I2CType                 ,I2C ,x  ,0,0),
+   df(X,I2CIsAvailable          ,I2C ,x  ,0,0),
+@@ -247,7 +247,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(X,I2CWriteRegister        ,I2C ,x  ,0,0),
+   df(X,I2CWriteReadCombined    ,I2C ,x  ,0,0),
+   df(X,IOCount                 ,IO  ,x  ,0,0),
+-  df(X,IOIsAvailable           ,IO  ,x  ,0,0),		
++  df(X,IOIsAvailable           ,IO  ,x  ,0,0),		//40
+   df(X,IORead                  ,IO  ,x  ,0,0),
+   df(X,IOWrite                 ,IO  ,x  ,0,0),
+   df(o,IOXorAndXor             ,IO  ,x  ,0,0),
+@@ -257,7 +257,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(o,IOGetNameA              ,x   ,x  ,0,0),
+   df(X,WDogCount               ,WD  ,x  ,0,0),
+   df(X,WDogIsAvailable         ,WD  ,x  ,0,0),
+-  df(X,WDogTrigger             ,WD  ,x  ,0,0),		
++  df(X,WDogTrigger             ,WD  ,x  ,0,0),		//50
+   df(o,WDogGetTriggerCount     ,WD  ,x  ,0,0),
+   df(o,WDogSetTriggerCount     ,WD  ,x  ,0,0),
+   df(X,WDogGetConfigStruct     ,WD  ,x  ,0,sizeof(unsigned int)*4), // first 4 pars of CGOSWDCONFIG are mandatory
+@@ -267,7 +267,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(X,WDogGetInfo             ,WD  ,x  ,0,sizeof(CGOSWDINFO)),
+   df(o,PerformanceGetCurrent   ,HWM ,x  ,0,0),
+   df(o,PerformanceSetCurrent   ,HWM ,x  ,0,0),
+-  df(o,PerformanceGetPolicyCaps,HWM ,x  ,0,0),		
++  df(o,PerformanceGetPolicyCaps,HWM ,x  ,0,0),		//60
+   df(o,PerformanceGetPolicy    ,HWM ,x  ,0,0),
+   df(o,PerformanceSetPolicy    ,HWM ,x  ,0,0),
+   df(X,TemperatureCount        ,HWM ,x  ,0,0),
+@@ -277,7 +277,7 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(X,FanCount                ,HWM ,x  ,0,0),
+   df(X,FanGetInfo              ,HWM ,x  ,0,sizeof(CGOSFANINFO)),
+   df(X,FanGetCurrent           ,HWM ,x  ,0,0),
+-  df(X,FanSetLimits            ,HWM ,x  ,sizeof(CGOSFANINFO),0),		
++  df(X,FanSetLimits            ,HWM ,x  ,sizeof(CGOSFANINFO),0),	//70	
+   df(X,VoltageCount            ,HWM ,x  ,0,0),							
+   df(X,VoltageGetInfo          ,HWM ,x  ,0,sizeof(CGOSVOLTAGEINFO)),	
+   df(X,VoltageGetCurrent       ,HWM ,x  ,0,0),							
+@@ -287,14 +287,14 @@ CGOS_DRV_FCT DrvFcts[]={
+   df(o,CgebDbgLevel            ,x   ,x  ,0,0),	
+   df(X,CgbcGetInfo             ,BC  ,x  ,0,sizeof(CGOSBCINFO)),
+   df(X,CgbcSetControl          ,BC  ,x  ,0,0),
+-  df(X,CgbcReadWrite           ,BC  ,x  ,0,0),		
++  df(X,CgbcReadWrite           ,BC  ,x  ,0,0),		//80
+   df(X,CgbcHandleCommand       ,BC  ,x  ,0,0),
+   df(X,StorageAreaLock         ,STO ,x  ,0,0),
+   df(X,StorageAreaUnlock       ,STO ,x  ,0,0),
+   df(X,StorageAreaIsLocked     ,STO ,x  ,0,0),
+   df(X,I2CGetMaxFrequency      ,I2C ,x  ,0,0),		
+   df(X,I2CGetFrequency         ,I2C ,x  ,0,0),
+-  df(X,I2CSetFrequency         ,I2C ,x  ,0,0),		
++  df(X,I2CSetFrequency         ,I2C ,x  ,0,0),		//87
+   };
+ 
+ #undef X
+diff --git a/CgosDrv/Lx/DrvLx.c b/CgosDrv/Lx/DrvLx.c
+index 8a0d88b..c071bd1 100644
+--- a/CgosDrv/Lx/DrvLx.c
++++ b/CgosDrv/Lx/DrvLx.c
+@@ -169,7 +169,7 @@ module_exit(cgos_exit);
+ 
+ //***************************************************************************
+ 
+-MODULE_AUTHOR("congatec AG");
++MODULE_AUTHOR("congatec GmbH");
+ MODULE_DESCRIPTION("CGOS driver");
+ MODULE_LICENSE("GPL");
+ 
+diff --git a/CgosDrv/Lx/cgosdrv.mod b/CgosDrv/Lx/cgosdrv.mod
+index 680d3ce..1d76d4a 100644
+--- a/CgosDrv/Lx/cgosdrv.mod
++++ b/CgosDrv/Lx/cgosdrv.mod
+@@ -1,2 +1,20 @@
+-/home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/DrvLx.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/DrvOsaLx.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../CgosDrv.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/BCModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/BoardModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/HWMModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/I2CModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/IOModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/StoModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/VgaModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/WDModule.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/IOSubModules/IOSubModule_BC.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/I2CSubModules/I2CSubModule_BC.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/WDSubModules/WDSubModule_BC.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/HWMSubModules/HWMSubModule_BC.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/VgaSubModules/VgaSubModule_BC.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/StoSubModules/StoSubModule_BC.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/BCSubModules/BCSubModule_BC4_BASE_C.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/BCSubModules/BCSubModule_BC4_BASE_E.o /home/congatec/Desktop/CGOS_DIRECT_Lx_common_R2.00.0023/CgosDrv/Lx/../Modules/BCSubModules/BCSubModule_GEN5.o
+-
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/DrvLx.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/DrvOsaLx.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../CgosDrv.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/BCModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/BoardModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/HWMModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/I2CModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/IOModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/StoModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/VgaModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/WDModule.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/IOSubModules/IOSubModule_BC.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/I2CSubModules/I2CSubModule_BC.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/WDSubModules/WDSubModule_BC.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/HWMSubModules/HWMSubModule_BC.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/VgaSubModules/VgaSubModule_BC.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/StoSubModules/StoSubModule_BC.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/BCSubModules/BCSubModule_BC4_BASE_C.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/BCSubModules/BCSubModule_BC4_BASE_E.o
++/home/congatec/Desktop/CGOS_DIRECT_Lx_common_025_RC/CgosDrv/Lx/../Modules/BCSubModules/BCSubModule_GEN5.o
+diff --git a/CgosDrv/Modules/BCModule.c b/CgosDrv/Modules/BCModule.c
+index 10a3203..763c7b6 100644
+--- a/CgosDrv/Modules/BCModule.c
++++ b/CgosDrv/Modules/BCModule.c
+@@ -606,10 +606,26 @@ unsigned int zCgosCgbcReadWrite(CGOS_DRV_VARS *cdv)
+ unsigned int zCgosCgbcHandleCommand(CGOS_DRV_VARS *cdv)	
+ {
+ 	unsigned char ret = 0;
++	//HMI v
++	unsigned int lin = cdv->lin;
++	unsigned int lout = cdv->lout;
++	unsigned char pin[256] = {0};
++	unsigned char pout[256] ={0};
++	//HMI ^
+ 	dbgbc(printk("zCgosCgbcHandleCommand called\n");)
+-	bcCommand(cdv->pin,cdv->lin,cdv->pout,cdv->lout,&ret);
++	//HMI v
++	if(( lin > 256)||(lout > 256))
++	{
++		return CGOS_ERROR;
++	}
++	OsaMemCpy(&pin[0],cdv->pin,lin);	
++	
++	cdv->cout->status = bcCommand(&pin[0],lin,&pout[0],lout,&ret);
++	OsaMemCpy(cdv->pout,&pout[0],lout);
++	//printk("bcmodule: sts = %x\n",ret);
+ 	cdv->cout->rets[0] = ret;
+-	cdv->retcnt += cdv->lout;
++	cdv->retcnt += sizeof(unsigned char)*lout;
++	//HMI 
+ 	return CGOS_SUCCESS;
+ }
+ 
+diff --git a/CgosDrv/Modules/BCSubModules/BCSubModule_GEN5.c b/CgosDrv/Modules/BCSubModules/BCSubModule_GEN5.c
+index d32b99e..2cbf97e 100644
+--- a/CgosDrv/Modules/BCSubModules/BCSubModule_GEN5.c
++++ b/CgosDrv/Modules/BCSubModules/BCSubModule_GEN5.c
+@@ -67,6 +67,13 @@ DbgPrintEx(
+ 	...
+ );
+ #endif
++//MOD25 v
++#define CGEB_BC_CONTROL_SS 0
++#define CGEB_BC_CONTROL_RESET 1
++#define CGEB_BC_CONTROL_WDTRIG 2                                  
++#define CGEB_BC_CONTROL_SCICHK 3
++#define CGBC_CMD_STATE_DATA 0x00
++//MOD25 ^
+ 
+ /*------------------------                                                      
+  * Global and static data
+@@ -75,8 +82,13 @@ DbgPrintEx(
+ static unsigned int gen5HcnmBaseAddr = HCNM_BASE; 
+ static unsigned int gen5ChBase = HCC0_BASE;
+ static unsigned char *gen5ClientNum;				  // 0x01: Reserved client access number for the BIOS.
+-												  // ToDo: check if there is a different number for Cgos Driver
+-
++			                                          // ToDo: check if there is a different number for Cgos Driver
++//MOD25 v
++static unsigned int cgSPIByteCount;
++static unsigned char cgBcBlocked;
++static unsigned char spiTransferBuf[4];
++static unsigned char spiReceiveBuf[4];
++//MOD25 ^
+ //***************************************************************************
+ 
+ //#define dbg_gen5_on
+@@ -214,8 +226,8 @@ unsigned int RegisterBCSubModule_GEN5(unsigned int (*RegisterSubModule)(	CgosFun
+ 								Probe_GEN5,
+ 								bcCommand_GEN5,
+ 								CgosCgbcGetInfo_GEN5,
+-								NULL, //CgosCgbcSetControl_GEN5,
+-								NULL, //CgosCgbcReadWrite_GEN5,
++								CgosCgbcSetControl_GEN5,
++								CgosCgbcReadWrite_GEN5,
+ 								exitSubModule_GEN5,
+ 								Number);
+ }
+@@ -241,9 +253,23 @@ unsigned int RegisterBCSubModule_GEN5(unsigned int (*RegisterSubModule)(	CgosFun
+  ***********************************************************************/
+ unsigned int initSubModule_GEN5(CGOS_DRV_VARS *cdv)
+ {
++	unsigned int i;
+ 	unsigned int retSuccess = CGOS_SUCCESS;
++	
+ 	dbgbc("initBCSubModule_GEN5 called\n");
+-
++	
++	//initialize global variables	//MOD25
++        cgSPIByteCount = 0;
++        for(i=0;i<4;i++)
++        {
++        	spiReceiveBuf[i] = 0;	
++        }
++        cgBcBlocked = 0;
++        for(i=0;i<4;i++)
++        {
++            spiTransferBuf[i] = 0;
++        }
++        
+ 	retSuccess = ObtainGen5ClientNumber();
+ 	return retSuccess;
+ }
+@@ -426,10 +452,17 @@ unsigned int Probe_GEN5(CGOS_DRV_VARS *cdv)
+     if( (retSuccess == CGOS_SUCCESS) && (chksum != chk) )
+     {
+ 		dbgbc("ERR: bcCommand_GEN5 failed\n");
++		/*printk("retSuccess = %x chksum = %x chk = %x", retSuccess, chksum, chk);
++		printk("cgbccommandbytes:");
++		for(i=0;i<cmdByteCount;i++)
++		{
++			printk("%x ",*(cmdDataBPtr+i));
++		}*/
+         retSuccess = CGOS_ERROR;
+     }
+       
+     // Return board controller command status
++    //printk("gen5 submodule bccommand: sts = %x\n",sts);
+     *retValueBPtr = sts;
+     return( retSuccess ); 
+ }
+@@ -462,13 +495,54 @@ unsigned int CgosCgbcGetInfo_GEN5(CGOS_DRV_VARS *cdv)
+  ***********************************************************************
+  * Description:				
+  * 																		
+- * Last Change: 20.09.2019 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: Added this function														
+  ***********************************************************************/    
+ unsigned int CgosCgbcSetControl_GEN5(CGOS_DRV_VARS *cdv)					
+   { 
+-	dbgbc("CgosCgbcSetControl_GEN5 called\n");	
++        unsigned char wbuf[5];
++    	unsigned char rbuf[4];
++        unsigned char sts;
++        unsigned char retSuccess = CGOS_SUCCESS;
++        
++ 	dbgbc("CgosCgbcSetControl_GEN5 called\n");
++ 		   
++  	switch(cdv->cin->pars[0]) //dwLine
++  	{
++  	  case CGEB_BC_CONTROL_SS: cdv->cout->rets[0] = CGOS_SUCCESS;
++  	  			   break;
++  	  case CGEB_BC_CONTROL_RESET: if(cdv->cin->pars[1] == 1)
++  	                              {
++  	                                 cgBcBlocked = 1;
++  	                                 cgSPIByteCount = 0;
++  	                                 cdv->cout->rets[0] = CGOS_SUCCESS;
++  	                              }
++  	                              else if(cdv->cin->pars[1] == 0)
++  	                              {
++  	                                 if (cgBcBlocked == 0)
++  	                                 {
++  	                                    cdv->cout->rets[0] = CGOS_SUCCESS;
++  	                                 }  
++  	                                 else
++  	                                 {
++  	                                    cgBcBlocked = 0;
++  	                                    wbuf[0] = CGBC_CMD_AVR_SPM;
++		  			    wbuf[1] = 0x00;	
++					    wbuf[2] = 0x00;	
++					    wbuf[3] = 0x00;	
++					    wbuf[4] = 0x00;
++  	                                    retSuccess = bcCommand_GEN5( &wbuf[0], 5, &rbuf[0], 4, &sts );
++  	                                 }    
++  	                                 cdv->cout->rets[0] = CGOS_SUCCESS;
++  	                              }
++  	                              break;
++  	  case CGEB_BC_CONTROL_WDTRIG: break;
++  	  case CGEB_BC_CONTROL_SCICHK: break;
++  	  default: cdv->cout->rets[0] = CGOS_ERROR;
++  	           break;
++  	}
++
+ 	return CGOS_SUCCESS;
+   }
+ 
+@@ -478,14 +552,56 @@ unsigned int CgosCgbcSetControl_GEN5(CGOS_DRV_VARS *cdv)
+  ***********************************************************************
+  * Description:				
+  * 																		
+- * Last Change: 20.09.2019 HMI											
++ * Last Change: 8-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: Added this function														
+  ***********************************************************************/  
+ unsigned int CgosCgbcReadWrite_GEN5(CGOS_DRV_VARS *cdv)					
+   { 
+-	dbgbc("CgosCgbcReadWrite_GEN5 called\n");
+-	return CGOS_SUCCESS;
++    unsigned int i;
++    unsigned char wbuf[5];
++    //unsigned char rbuf[4] = {0};
++    unsigned char sts;
++    unsigned char retSuccess = CGOS_SUCCESS;
++    
++    dbgbc("CgosCgbcReadWrite_GEN5 called\n");
++    
++    if(cgSPIByteCount == 4)
++    {
++       cgSPIByteCount = 0;
++    }
++    else if(cgSPIByteCount > 4)
++    {
++       cgSPIByteCount = 0;
++       return CGOS_ERROR;
++    }
++    
++    spiTransferBuf[cgSPIByteCount] = cdv->cin->pars[0];
++    cgSPIByteCount++;
++    
++    if(cgSPIByteCount == 4)
++    {
++       wbuf[0] = CGBC_CMD_AVR_SPM;
++       for( i = 0; i < 4; i++)
++       {
++          wbuf[4-i] = spiTransferBuf[i];
++       }
++	    
++       retSuccess = bcCommand_GEN5( &wbuf[0], 5, &spiReceiveBuf[0], 4, &sts );
++       //printk("cgbcreadwrite: spiReceiveBuf[0] = %x, spiReceiveBuf[1] = %x, spiReceiveBuf[2] = %x, spiReceiveBuf[3] = %x, sts = %x",spiReceiveBuf[0],spiReceiveBuf[1],spiReceiveBuf[2],spiReceiveBuf[3], sts);
++       if(retSuccess == CGOS_SUCCESS)
++       {
++	  //cdv->cout->rets[0] = (rbuf[3]<<24)|(rbuf[2]<<16)|(rbuf[1]<<8)|rbuf[0];
++	  //printk("cgbcreadwrite: rets[0] = %x\n", cdv->cout->rets[0]);
++       }
++       else
++       {
++          return CGOS_ERROR;
++       }
++    }
++    cdv->cout->rets[0] = spiReceiveBuf[4-cgSPIByteCount];
++    //printk("cgbcreadwrite: rets[0] = %x\n", cdv->cout->rets[0]);
++    return CGOS_SUCCESS;
+   }
+ 
+ /***********************************************************************
+diff --git a/CgosDrv/Modules/BoardModule.c b/CgosDrv/Modules/BoardModule.c
+index af194e5..cacf955 100644
+--- a/CgosDrv/Modules/BoardModule.c
++++ b/CgosDrv/Modules/BoardModule.c
+@@ -25,6 +25,7 @@
+ #ifdef __linux__
+ #include <linux/printk.h>
+ #include <linux/dmi.h>
++#include <linux/delay.h>
+ #endif
+  
+ #include "CgosDrv.h"
+@@ -49,7 +50,7 @@ DbgPrintEx(
+ 
+ //***************************************************************************
+ 
+-//#define dbgbrd_on
++#define dbgbrd_on
+ 
+ #ifdef dbgbrd_on
+ #ifdef __linux__
+@@ -151,6 +152,11 @@ unsigned int getBoardInfoFromBC(CGOS_DRV_VARS *cdv)
+ 	for (i = 0; i < 64; i++)
+ 	{
+ 		CgosI2CReadRegisterRaw_BC(CGBC_I2C_BUS_INTERNAL, CG_SDA_EEP_I2C_ADDR, i, &bcInfoBuffer[i]);
++		#ifdef __linux__	//MOD25 v
++		msleep(1);
++		#else
++		OsaSleepms(NULL, 1);
++		#endif			   //MOD25 ^
+ 	}
+ 	
+ 	//Copy relevant information from bcInfoBuffer to cdv
+@@ -279,6 +285,7 @@ unsigned int initBoardModule(CGOS_DRV_VARS *cdv)
+ 		{
+ 			OsaMemCpy(&cdv->brd[i].info,&BOARD_INFO[i],sizeof(CGOSBOARDINFO));
+ 		}
++		getBoardInfoFromBC(cdv);
+ 	}
+ 	else
+ 	{
+@@ -465,9 +472,15 @@ unsigned int zCgosBoardGetBootCounter(CGOS_DRV_VARS *cdv)
+ 		}
+ 		else
+ 		{
+-			retSuccess = CGOS_NOT_IMPLEMENTED;
++			cdv->cout->rets[0] = 0;
++			retSuccess = CGOS_SUCCESS;
+ 		}
+ 	}
++	else
++	{
++		cdv->cout->rets[0] = 0;
++		retSuccess = CGOS_SUCCESS;
++	}
+ 	return retSuccess;
+   }
+ 
+@@ -510,9 +523,15 @@ unsigned int zCgosBoardGetRunningTimeMeter(CGOS_DRV_VARS *cdv)
+ 		}
+ 		else
+ 		{
+-			retSuccess = CGOS_NOT_IMPLEMENTED;
++			cdv->cout->rets[0] = 0;
++			retSuccess = CGOS_SUCCESS;
+ 		}
+ 	}
++	else
++	{
++		cdv->cout->rets[0] = 0;
++		retSuccess = CGOS_SUCCESS;
++	}
+ 	return retSuccess;
+   }
+ 
+diff --git a/CgosDrv/Modules/HWMSubModules/HWMSubModule_BC.c b/CgosDrv/Modules/HWMSubModules/HWMSubModule_BC.c
+index 4356bf9..3710c97 100644
+--- a/CgosDrv/Modules/HWMSubModules/HWMSubModule_BC.c
++++ b/CgosDrv/Modules/HWMSubModules/HWMSubModule_BC.c
+@@ -556,14 +556,15 @@ unsigned int CgosTemperatureGetInfo_BC(CGOS_DRV_VARS *cdv)
+  * Description: Gets status and value/error code of the	requested		
+  * 				temperature sensor.										
+  * 																		
+- * Last Change: 25.06.2018 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: Improved error handling														
+  ***********************************************************************/
+ unsigned int CgosTemperatureGetCurrent_BC(CGOS_DRV_VARS *cdv)
+   {
+ 	unsigned char wbuf[2];
+ 	unsigned char rbuf[5];
++	unsigned char ret;
+ 	unsigned char SensorStatus = 0;
+ 	unsigned char sts;
+ 
+@@ -577,9 +578,16 @@ unsigned int CgosTemperatureGetCurrent_BC(CGOS_DRV_VARS *cdv)
+ 	{
+ 		wbuf[0] = CGBC_CMD_HWM_SENSOR;
+ 		wbuf[1] = cdv->hwm->tempsensors[cdv->cin->type].BCUnitNumber;
+-	
+-		bcCommand(&wbuf[0],2,&rbuf[0],5,&sts);
+-		
++
++		ret = bcCommand(&wbuf[0], 2, &rbuf[0], 5, &sts);
++		if ((ret != CGOS_SUCCESS) || ((sts & 0xC0) == 0xC0))
++		{
++			//cdv->cout->status = CGOS_ERROR;
++			return CGOS_ERROR;
++		}
++
++		//DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "CgosTemperatureGetCurrent: rbuf[0] = %x, rbuf[1] = %x, rbuf[2] = %x, rbuf[3] = %x", rbuf[0], rbuf[1], rbuf[2], rbuf[3]);
++
+ 		SensorStatus = rbuf[1];
+ 		if(((SensorStatus & 0x80) >> 7) == 1)	//Sensor Status active
+ 		{
+@@ -587,8 +595,8 @@ unsigned int CgosTemperatureGetCurrent_BC(CGOS_DRV_VARS *cdv)
+ 			//rbuf[3] the high byte.
+ 		
+ 			cdv->cout->rets[0] = ((rbuf[3]<<8)|rbuf[2]) * 100;	// *100 because board controller returns 
+-																// 0.1 degree centigrade and cgos expects 
+-																// 0.001 degree centigrade.
++										// 0.1 degree centigrade and cgos expects 
++										// 0.001 degree centigrade.
+ 			cdv->cout->rets[1] = CGOS_SENSOR_ACTIVE;											
+ 		}
+ 		else //Sensor Status inactive
+diff --git a/CgosDrv/Modules/IOSubModules/IOSubModule_BC.c b/CgosDrv/Modules/IOSubModules/IOSubModule_BC.c
+index 16c6556..2b89a7b 100644
+--- a/CgosDrv/Modules/IOSubModules/IOSubModule_BC.c
++++ b/CgosDrv/Modules/IOSubModules/IOSubModule_BC.c
+@@ -85,9 +85,10 @@ unsigned int exitIOSubModule_BC(CGOS_DRV_VARS *cdv);
+  * Description: This function uses the RegisterSubModule callback to	
+  * 			  	register the SubModule functions.						
+  * 																		
+- * Last Change: 20.12.2017 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: Removed CgosIOSetDirection_BC, now handled by
++ *                       by BIOS only.														
+  ***********************************************************************/
+ unsigned int RegisterIOSubModule_BC(unsigned int (*RegisterSubModule)(	CgosFunctionPointer initSubModule,
+ 																		CgosFunctionPointer Count,
+@@ -106,7 +107,7 @@ unsigned int RegisterIOSubModule_BC(unsigned int (*RegisterSubModule)(	CgosFunct
+ 								CgosIORead_BC,
+ 								CgosIOWrite_BC,
+ 								CgosIOGetDirection_BC,
+-								CgosIOSetDirection_BC,
++								NULL, //CgosIOSetDirection_BC,		//MOD25
+ 								CgosIOIsAvailable_BC,
+ 								CgosIOGetDirectionCaps_BC,
+ 								exitIOSubModule_BC,
+@@ -132,7 +133,14 @@ unsigned int initIOSubModule_BC(CGOS_DRV_VARS *cdv)
+ 	if(IO_COUNT_BC <= CGOS_DRV_IO_MAX)		//CGOS_DRV_IO_MAX defined in DrvVars.h
+ 	{
+ 		cdv->brd->ioCount = IO_COUNT_BC;
+-		OsaMemCpy(&cdv->brd->iocaps[0],&IO_CAPS_BC[0],IO_COUNT_BC * sizeof(CGOS_DRV_IO_DIR_CAPS));	//May cause alignment problems
++		if((cdv->brd->info.szBoard[0] == 'S')&&(cdv->brd->info.szBoard[1] == 'A')&&(cdv->brd->info.szBoard[2] == '7')&&(cdv->brd->info.szBoard[3] == '0'))
++		{
++			OsaMemCpy(&cdv->brd->iocaps[0],&IO_CAPS_BC_SA70[0],IO_COUNT_BC * sizeof(CGOS_DRV_IO_DIR_CAPS));	//May cause alignment problems
++		}
++		else
++		{
++			OsaMemCpy(&cdv->brd->iocaps[0],&IO_CAPS_BC[0],IO_COUNT_BC * sizeof(CGOS_DRV_IO_DIR_CAPS));	//May cause alignment problems
++		}
+ 	}
+ 	else
+ 	{
+@@ -164,9 +172,10 @@ unsigned int CgosIOCount_BC(CGOS_DRV_VARS *cdv)
+  ***********************************************************************
+  * Description: This function reads a IO Unit.							
+  * 																		
+- * Last Change: 24.01.2018 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: Added better translation from 32bit cgos unit
++ *                       number to cBC 8bit unit number.														
+  ***********************************************************************/
+ unsigned int CgosIORead_BC(CGOS_DRV_VARS *cdv)
+ {
+@@ -174,19 +183,31 @@ unsigned int CgosIORead_BC(CGOS_DRV_VARS *cdv)
+ 	unsigned char sts;
+ 	unsigned char ret;
+ 	unsigned char rets;
++	unsigned char CgosGPIOUnit = cdv->cin->type;
++	unsigned int i;
+ 	
+ 	dbgio("CgosIORead_BC called\n");
+ 
++	cdv->cout->rets[0] = 0;	//Clear output Buffer
+ 	if(cdv->cin->type < cdv->brd->ioCount)
+ 	{	
+-		wbuf[0] = CGBC_CMD_GPIO_DAT_RD;
+-		wbuf[1] = cdv->cin->type;
+-		wbuf[2] = 0x00;
+-	
+-		ret = bcCommand(&wbuf[0],3,&rets,1,&sts);
+-		cdv->cout->rets[0] = rets;
+-
+-		return ret;
++		for(i = 0; i < 4; i++)
++		{
++			wbuf[0] = CGBC_CMD_GPIO_DAT_RD;
++			wbuf[1] = i+(4*CgosGPIOUnit);
++			wbuf[2] = 0x00;
++	       
++			ret = bcCommand(&wbuf[0],3,&rets,1,&sts);
++			if(ret != CGOS_SUCCESS)
++			{
++				break;
++			}
++			else
++			{
++			 	cdv->cout->rets[0] |= (rets<<8*i);
++			}
++		}
++		return CGOS_SUCCESS; 
+ 	}
+ 	else
+ 	{
+@@ -200,9 +221,10 @@ unsigned int CgosIORead_BC(CGOS_DRV_VARS *cdv)
+  ***********************************************************************
+  * Description: This function writes to a IO Unit.						
+  * 																		
+- * Last Change: 24.01.2018 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: Added better translation from 32bit cgos unit
++ *                       number to cBC 8bit unit number.														
+  ***********************************************************************/
+ unsigned int CgosIOWrite_BC(CGOS_DRV_VARS *cdv)
+ {
+@@ -210,18 +232,26 @@ unsigned int CgosIOWrite_BC(CGOS_DRV_VARS *cdv)
+ 	unsigned char sts;
+ 	unsigned char ret;
+ 	unsigned char rets;
++	unsigned char CgosGPIOUnit = cdv->cin->type;
++	unsigned int i;
+ 	
+ 	dbgio("CgosIOWrite_BC called\n");
+ 
+ 	if(cdv->cin->type < cdv->brd->ioCount)
+ 	{	
+-		wbuf[0] = CGBC_CMD_GPIO_DAT_WR;
+-		wbuf[1] = cdv->cin->type;
+-		wbuf[2] = cdv->cin->pars[0];
++		for(i = 0; i < 4; i++)
++		{
++			wbuf[0] = CGBC_CMD_GPIO_DAT_WR;
++			wbuf[1] = i+(4*CgosGPIOUnit);
++			wbuf[2] = (cdv->cin->pars[0] >> (8 * i)) & 0xFF;
+ 
+-		ret = bcCommand(&wbuf[0],3,&rets,1,&sts); 	
+-		
+-		return ret;
++			ret = bcCommand(&wbuf[0],3,&rets,1,&sts); 
++			if(ret != CGOS_SUCCESS)
++			{
++				break;
++			}	
++		}
++		return CGOS_SUCCESS;
+ 	}
+ 	else
+ 	{
+@@ -235,9 +265,12 @@ unsigned int CgosIOWrite_BC(CGOS_DRV_VARS *cdv)
+  ***********************************************************************
+  * Description: This function gets the current IO directions.			
+  * 																		
+- * Last Change: 24.01.2018 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: + Added better translation from 32bit cgos unit
++ *                         number to cBC 8bit unit number.
++ *                       + Fixed error with toggling	
++ *			             + Changed return value													
+  ***********************************************************************/
+ unsigned int CgosIOGetDirection_BC(CGOS_DRV_VARS *cdv)
+ {
+@@ -245,19 +278,33 @@ unsigned int CgosIOGetDirection_BC(CGOS_DRV_VARS *cdv)
+ 	unsigned char sts;
+ 	unsigned char ret;
+ 	unsigned char rets;
++	unsigned char CgosGPIOUnit = cdv->cin->type;
++	unsigned int i;
+ 	
+ 	dbgio("CgosIOGetDirection_BC called\n");
+-
++	
++	cdv->cout->rets[0] = 0;	//Clear output Buffer
+ 	if(cdv->cin->type < cdv->brd->ioCount)
+ 	{
+-		wbuf[0] = CGBC_CMD_GPIO_CFG_RD;
+-		wbuf[1] = cdv->cin->type;
+-		wbuf[2] = 0x00;
++		for(i = 0; i < 4; i++)
++		{
++			wbuf[0] = CGBC_CMD_GPIO_CFG_RD;
++			wbuf[1] = i+(4*CgosGPIOUnit);
++			wbuf[2] = 0x00;
+ 	
+-		ret = bcCommand(&wbuf[0],3,&rets,1,&sts);
+-		cdv->cout->rets[0] = rets;
+-	 
+-		return ret;
++			ret = bcCommand(&wbuf[0],3,&rets,1,&sts);
++			if(ret != CGOS_SUCCESS)
++			{
++				break;
++			}
++			else
++			{
++				
++				cdv->cout->rets[0] |= (((~rets)&0xFF)<<(8*i)); //Toggle Pin state due to different interpretation
++			       	                    		               //from Cgos and cBC. //MOD25
++			}
++	 	}
++		return CGOS_SUCCESS; 	//MOD25 changed ret to CGOS_SUCCESS
+ 	}
+ 	else
+ 	{
+@@ -269,11 +316,19 @@ unsigned int CgosIOGetDirection_BC(CGOS_DRV_VARS *cdv)
+  * unsigned int CgosIOSetDirection_BC(CGOS_DRV_VARS *cdv)				
+  * 																		
+  ***********************************************************************
+- * Description: This function sets the IO directions.					
++ * Description: This function sets the IO directions. Beginning with
++ *              cgos_direct release 025 this function is set to 
++ *              deactivated. To activate it again go to the 
++ *              RegisterIOSubModule_BC function above and replace the 
++ *              NULL with the commented "CgosIOSetDirection_BC,"
++ *              function pointer.			
+  * 																		
+- * Last Change: 24.01.2018 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: + Added better translation from 32bit cgos unit
++ *                         number to cBC 8bit unit number.
++ *			 + changed return value
++ *			 + function was removed in register function														
+  ***********************************************************************/
+ unsigned int CgosIOSetDirection_BC(CGOS_DRV_VARS *cdv)
+ {
+@@ -281,18 +336,26 @@ unsigned int CgosIOSetDirection_BC(CGOS_DRV_VARS *cdv)
+ 	unsigned char sts;
+ 	unsigned char ret;
+ 	unsigned char rets;
++	unsigned char CgosGPIOUnit = cdv->cin->type;
++	unsigned int i;
+ 
+ 	dbgio("CgosIOSetDirection_BC called\n");
+ 
+ 	if(cdv->cin->type < cdv->brd->ioCount)
+ 	{
+-		wbuf[0] = CGBC_CMD_GPIO_CFG_WR;
+-		wbuf[1] = cdv->cin->type;
+-		wbuf[2] = cdv->cin->pars[0];
+-
+-		ret = bcCommand(&wbuf[0],3,&rets,1,&sts);
++		for(i = 0; i < 4; i++)
++		{
++			wbuf[0] = CGBC_CMD_GPIO_CFG_WR;
++			wbuf[1] = i+(4*CgosGPIOUnit);
++			wbuf[2] = (~cdv->cin->pars[0] >> (8 * i)) & 0xFF; //Toggle due to different interpretation from cgos and cBC.
+ 			
+-		return ret;
++			ret = bcCommand(&wbuf[0],3,&rets,1,&sts);
++			if(ret != CGOS_SUCCESS)
++			{
++				break;
++			}
++		}	
++		return CGOS_SUCCESS; 	//MOD25 changed ret to CGOS_SUCCESS
+ 	}
+ 	else
+ 	{
+diff --git a/CgosDrv/Modules/IOSubModules/IOSubModule_BC_cfg.h b/CgosDrv/Modules/IOSubModules/IOSubModule_BC_cfg.h
+index e9926ea..b297b42 100644
+--- a/CgosDrv/Modules/IOSubModules/IOSubModule_BC_cfg.h
++++ b/CgosDrv/Modules/IOSubModules/IOSubModule_BC_cfg.h
+@@ -27,6 +27,10 @@
+ #define IO_COUNT_BC 1
+ 
+ CGOS_DRV_IO_DIR_CAPS IO_CAPS_BC[IO_COUNT_BC] = {{ 	0x000000ff, //in
+-													0x0000ff00 	//out
+-												}};
++													0x00000ff 	//out	//MOD25
++												}};	//CAPS for COMe Boards
++CGOS_DRV_IO_DIR_CAPS IO_CAPS_BC_SA70[IO_COUNT_BC] = {{ 	0x00000fff, //in
++													0x0000fff 	//out 	//MOD25
++												}};	//CAPS for SA70												
++												
+ #endif
+diff --git a/CgosDrv/Modules/StoSubModules/StoSubModule_BC.c b/CgosDrv/Modules/StoSubModules/StoSubModule_BC.c
+index 0370d02..f61c470 100644
+--- a/CgosDrv/Modules/StoSubModules/StoSubModule_BC.c
++++ b/CgosDrv/Modules/StoSubModules/StoSubModule_BC.c
+@@ -969,7 +969,7 @@ unsigned int CgosStorageAreaLock_BC(CGOS_DRV_VARS *cdv)
+ 	unsigned char stat;
+ 
+ 	dbgsto("CgosStorageAreaLock_BC called\n");
+-
++	//printk("CgosStorageAreaLock_BC: Tried to lock Area %x", cdv->cin->type);	//HMI
+ 	//See if cdv->cin->type is a index or a storage area type
+ 	if(IsAreaType(cdv->cin->type))	// area type
+ 	{
+diff --git a/CgosDrv/Modules/WDSubModules/WDSubModule_BC.c b/CgosDrv/Modules/WDSubModules/WDSubModule_BC.c
+index 8affd0a..97cac15 100644
+--- a/CgosDrv/Modules/WDSubModules/WDSubModule_BC.c
++++ b/CgosDrv/Modules/WDSubModules/WDSubModule_BC.c
+@@ -441,9 +441,12 @@ unsigned int CgosWDogSetConfigStruct_BC(CGOS_DRV_VARS *cdv)
+  * 				isn't stored in the cdv struct and sent to the BC 		
+  * 				immediately.											
+  * 																		
+- * Last Change: 06.12.2017 HMI											
++ * Last Change: 08-May-2023 HMI											
+  * 																		
+- * Modifications:														
++ * Modifications: MOD25: + Set values are now stored in Cgos WD config
++ *		         + Added translation from cgos definition of mode
++ *			   to cBC definition of mode instead of passing it
++ *                         directly.													
+  ***********************************************************************/  
+ unsigned int CgosWDogSetConfig_BC(CGOS_DRV_VARS *cdv)
+   {
+@@ -453,8 +456,27 @@ unsigned int CgosWDogSetConfig_BC(CGOS_DRV_VARS *cdv)
+ 	
+ 	dbgwd("CgosWDogSetConfig_BC called\n");
+ 	
++	//Update WD_config						//MOD25
++	cdv->wdog[0].config.dwTimeout = cdv->cin->pars[0];
++	cdv->wdog[0].config.dwDelay = cdv->cin->pars[1];
++	cdv->wdog[0].config.dwMode = cdv->cin->pars[2];
++	cdv->wdog[0].config.dwStageCount = 1;
++	if(cdv->cin->pars[2] == CGOS_WDOG_MODE_REBOOT_PC)
++	{
++		cdv->wdog[0].config.stStages[0].dwEvent = CGOS_WDOG_EVENT_RST;
++	}
++	else if(cdv->cin->pars[2] == CGOS_WDOG_MODE_RESTART_OS)
++	{
++		cdv->wdog[0].config.stStages[0].dwEvent = CGOS_WDOG_EVENT_BTN;
++	}
++	else
++	{
++		return CGOS_ERROR;
++	}
++	
++	//Execute Board Controller command
+ 	wbuf[0]  = CGBC_CMD_WD_INIT;
+-	wbuf[1]  = cdv->cin->pars[2];
++	wbuf[1]  = CGBC_WD_SINGLE_EVENT_MODE;				//MOD25
+ 	if(cdv->cin->pars[2] == CGOS_WDOG_MODE_REBOOT_PC)
+ 	{
+ 		wbuf[2]  = 1 | (CGBC_WD_EVENT_RST << 2);
+diff --git a/CgosMon/CgosMon.c b/CgosMon/CgosMon.c
+index 7475e33..ad3d3d6 100644
+--- a/CgosMon/CgosMon.c
++++ b/CgosMon/CgosMon.c
+@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
+       }		
+ 	}
+ 	
++	/* MOD25
+ 	//check library version
+ 	dwLibVersion = CgosLibGetVersion();
+ 	dwDrvVersion = CgosLibGetDrvVersion();
+@@ -127,7 +128,7 @@ int main(int argc, char* argv[])
+ 		report(buf);
+ 	  CgosBoardClose(hCgos);
+ 	  return(-1);
+-	}  
++	}  */ //MOD25
+ 
+ 	
+     // open the cgos board
+diff --git a/CgosTest/cgostest.c b/CgosTest/cgostest.c
+index a397603..0a8ca9a 100644
+--- a/CgosTest/cgostest.c
++++ b/CgosTest/cgostest.c
+@@ -2396,17 +2396,21 @@ void HandleSupported(int argc, _TCHAR* argv[])
+  *---------------------------------------------------------------------------
+  */
+ void HandleGPIO(int argc, _TCHAR* argv[])
+-{
++{/*
+     unsigned int ulGpioUnitCount = 0;
+     unsigned int ulUnit;
+     unsigned int ulInputPins, ulOutputPins, ulCurrentPinDirection,ulGPIOPinState;
+     unsigned short w;
+     unsigned char ch ,cUnitName[128];
+     unsigned short usGpioHwFail = FALSE;
+-
++*/
+     report(TEXT("\n****************************************\n"));
+     report(TEXT("Testing CGOS GPIO functions.\n"));
+     report(TEXT("****************************************\n"));
++    //MOD25
++    report(TEXT("GPIO test was removed because GPIOs cannot be tested on the fly\n"));
++    report(TEXT("without connecting additional hardware the right way\n")); 
++    /* //MOD25
+     report(TEXT("Enter [s] to skip test, any other key to continue.\n"));
+     ch = getchar();
+     if(ch == 's')
+@@ -2414,13 +2418,13 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+         return;
+     }
+     
+-    /* 
++    
+     #################
+         CgosIOCount
+     #################
+     Get number of implemented GPIO units. A single GPIO unit can handle up to
+     32 GPIs/GPOs/GPIOs
+-    */
++    
+     report(TEXT("\nFunction: CgosIOCount\n"));
+     report(TEXT("Get number of available GPIO handler units.\n"));
+     report(TEXT("A single GPIO unit can handle up to 32 GPIs/GPOs/GPIOs.\n"));
+@@ -2433,12 +2437,12 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+ 
+     for(ulUnit = 0; ulUnit < ulGpioUnitCount; ulUnit++)
+     {
+-        /*
++        
+         ######################## 
+             CgosIOIsAvailable 
+         ########################
+         Check whether GPIO unit is available.
+-        */
++        
+         report(TEXT("\nFunction: CgosIOIsAvailable\n"));
+         report(TEXT("Check whether GPIO unit with given index can be used.\n"));
+         if (!CgosIOIsAvailable(hCgos, ulUnit))
+@@ -2454,12 +2458,12 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             sprintf(buf, "Unit number: %u", ulUnit);
+             Log("CgosIOIsAvailable","SUCCESS",buf);            
+ 
+-            /*
++            
+             ####################
+                 CgosIOGetName
+             ####################
+             Get name of GPIO unit (zero terminated string).
+-            */
++            
+ 
+             report(TEXT("\nFunction: CgosIOGetName\n"));
+             report(TEXT("Return name of GPIO unit.\n"));
+@@ -2482,12 +2486,12 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             report(TEXT("\nPress [ENTER] to continue...\n"));
+             getchar();
+ 
+-            /*
++            
+             ############################
+                 CgosIOGetDirectionCaps
+             ############################
+             Get direction capabilities of GPIOs handled by a certain GPIO handler.
+-            */
++            
+             report(TEXT("\nFunction: CgosIOGetDirectionCaps\n"));
+             report(TEXT("Return direction capabilities of the pins handled by the selected GPIO unit.\n"));
+             report(TEXT("A bit set in the input pin field indicates that this bit can handle a GPI.\n"));
+@@ -2513,7 +2517,7 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             report(TEXT("\nPress [ENTER] to continue...\n"));
+             getchar();
+ 
+-            /*
++            
+             #########################
+                 CgosIOGetDirection
+             #########################
+@@ -2521,7 +2525,7 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             the respective pin is (currently) configured as input, a bit set to 0 indicates that
+             the respective pin is (currently) configured as output, or not implemented
+             (cross check with result of CgosIOGetDirectionCaps which returns the implemented pins).
+-            */
++            
+             report(TEXT("\nFunction: CgosIOGetDirection\n"));
+             report(TEXT("Get current direction of the GPIO pins. A bit set to 1 in this field indicates\n"));
+             report(TEXT("that the respective pin is configured as input, a bit set to 0 indicates that\n"));
+@@ -2542,18 +2546,18 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             report(TEXT("\nPress [ENTER] to continue...\n"));
+             getchar();
+ 
+-            /*
++            
+             #########################
+                 CgosIOSetDirection
+             #########################
+             Changing the pin direction configuration is not supported for the COMExpress 
+             GPIO unit as GPI/GPO configuration is fixed by spec./design.
+             Therefore the respective function will fail for COMExpress (added for completeness only).
+-            */
++            
+             report(TEXT("\nFunction: CgosIOSetDirection\n"));
+             report(TEXT("Try to change current pin direction configuration.\n"));
+             report(TEXT("(Fails if pin direction configuration cannot be changed (e.g. COMExpress))\n"));
+-            if(CgosIOSetDirection(hCgos, ulUnit, 0xFFFFFFFF))   /*Try to configure all pins as input*/
++            if(CgosIOSetDirection(hCgos, ulUnit, 0xFFFFFFFF))   //Try to configure all pins as input
+             {
+                 sprintf(buf, TEXT("\nGPIO unit %d \nPin direction configuration changed\n"),ulUnit); report(buf);
+                 sprintf(buf, "Unit number: %u", ulUnit);
+@@ -2569,7 +2573,7 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             report(TEXT("\nPress [ENTER] to continue...\n"));
+             getchar();
+            
+-            /*
++            
+             ################
+                 CgosIORead
+             ################
+@@ -2578,7 +2582,7 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             pins derived from the results of CgosIOGetDirectionCaps has to be considered.
+             For pins configured as output, the last state written to this pin is returned
+             (assuming that an output pin always can be set to the desired/requested state).
+-            */
++            
+             report(TEXT("\nFunction: CgosIORead\n"));
+             report(TEXT("Read current state of the GPIO pins. A bit set to 1 indicates the respective\n"));
+             report(TEXT("pin is high. A bit set to 0 indicates the corresponding pin is low or\n"));
+@@ -2601,14 +2605,14 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             report(TEXT("\nPress [ENTER] to continue...\n"));
+             getchar();
+ 
+-            /*
++            
+             #################
+                 CgosIOWrite
+             #################
+             Set state of GPIO pins. Of course only the state of pins configured as outputs can be changed.
+             However, the function will gracefully ignore values set for input pins or pins that are not
+             even implemented.
+-            */
++            
+             report(TEXT("\nFunction: CgosIOWrite\n"));
+             report(TEXT("Set state of GPIO pins.\n"));
+             report(TEXT("Of course only the state of pins configured as outputs can be changed.\n"));            
+@@ -2681,28 +2685,29 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+             }
+             else
+             {
++            	CgosIOSetDirection(hCgos, ulUnit, 0x00000000);	//HMI: Added setting all pins to output
+                 usGpioHwFail = TRUE;
+                 CgosIOWrite(hCgos, ulUnit, 0x00000000);
+                 CgosIORead(hCgos, ulUnit, &ulGPIOPinState);
+                 if((ulGPIOPinState & 0x000000FF) == 0x00000000)
+                 {
+-                    CgosIOWrite(hCgos, ulUnit, 0x00000010);
++                    CgosIOWrite(hCgos, ulUnit, 0x00000011);	//HMI: changed 10 to 11
+                     CgosIORead(hCgos, ulUnit, &ulGPIOPinState);
+                     if((ulGPIOPinState & 0x000000FF)== 0x00000011)
+                     {
+-                        CgosIOWrite(hCgos, ulUnit, 0x00000020);
++                        CgosIOWrite(hCgos, ulUnit, 0x00000022);	//HMI: changed 20 to 22
+                         CgosIORead(hCgos, ulUnit, &ulGPIOPinState);
+                         if((ulGPIOPinState & 0x000000FF) == 0x00000022)
+                         {
+-                            CgosIOWrite(hCgos, ulUnit, 0x00000040);
++                            CgosIOWrite(hCgos, ulUnit, 0x00000044);	//HMI: changed 40 to 44
+                             CgosIORead(hCgos, ulUnit, &ulGPIOPinState);
+                             if((ulGPIOPinState & 0x000000FF)== 0x00000044)
+                             {
+-                                CgosIOWrite(hCgos, ulUnit, 0x00000080);
++                                CgosIOWrite(hCgos, ulUnit, 0x00000088);	//HMI: changed 80 to 88
+                                 CgosIORead(hCgos, ulUnit, &ulGPIOPinState);
+                                 if((ulGPIOPinState & 0x000000FF)== 0x00000088)
+                                 {
+-                                    CgosIOWrite(hCgos, ulUnit, 0x000000F0);
++                                    CgosIOWrite(hCgos, ulUnit, 0x000000FF);	//HMI: changed F0 to FF
+                                     CgosIORead(hCgos, ulUnit, &ulGPIOPinState);
+                                     if((ulGPIOPinState & 0x000000FF)== 0x000000FF)
+                                     {
+@@ -2722,16 +2727,16 @@ void HandleGPIO(int argc, _TCHAR* argv[])
+                 Log("GPIO Hardware Test","FAILED","");                
+             }
+ 
+-            /*
++            
+             #####################
+                 CgosIOXorAndXor
+             #####################
+             This function is reserved for future usage. Meant to easy read/write/modify accesses.
+-            */
++            
+             sprintf(buf, "Unit number: %u", ulUnit);
+             Log("CgosIOXorAndXor","! NOT TESTED !",buf);            
+         }
+-    }
++    }*/
+     return;
+ }
+ 

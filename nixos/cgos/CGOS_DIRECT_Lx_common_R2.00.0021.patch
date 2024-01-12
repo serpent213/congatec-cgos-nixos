@@ -1,0 +1,142 @@
+diff --git a/CgosDrv/Lx/Makefile b/CgosDrv/Lx/Makefile
+index 705e51e..6a62aca 100755
+--- a/CgosDrv/Lx/Makefile
++++ b/CgosDrv/Lx/Makefile
+@@ -26,8 +26,8 @@ ifdef KERNELRELEASE
+ 	EXTRA_CFLAGS += -I$(obj)/. -I$(obj)/.. -I$(obj)/../../CgosLib
+ 	EXTRA_CFLAGS += -I$(obj)/../../CgosLib/Lx
+ #	EXTRA_CFLAGS += -O2 -mcmodel=kernel -DAMD64 -fno-strict-aliasing
+-#	EXTRA_CFLAGS += -O2 -DAMD64 -fno-strict-aliasing
+-	EXTRA_CFLAGS += -O2 -fno-strict-aliasing
++	EXTRA_CFLAGS += -O2 -DAMD64 -fno-strict-aliasing
++#	EXTRA_CFLAGS += -O2 -fno-strict-aliasing
+ 	EXTRA_CFLAGS += -I$(obj)/../..
+ 	obj-$(CONFIG_CGOS) += cgosdrv.o	
+ 
+@@ -41,8 +41,8 @@ else
+ 	EXTRA_CFLAGS = $(DEF) -O2 -Wall -Wl,-r -nostdlib
+ 	EXTRA_CFLAGS += -I. -I.. -I../.. -I$(KERNELDIR)/include -I../../CgosLib -I../Modules
+ #	EXTRA_CFLAGS += -mcmodel=kernel -DAMD64 -fno-strict-aliasing
+-#	EXTRA_CFLAGS += -DAMD64 -fno-strict-aliasing
+-	EXTRA_CFLAGS += -fno-strict-aliasing
++	EXTRA_CFLAGS += -DAMD64 -fno-strict-aliasing
++#	EXTRA_CFLAGS += -fno-strict-aliasing
+ 
+ default:
+ 	$(call mkcmd)
+@@ -62,6 +62,6 @@ clean:
+ 	rm -rf ../Modules/BCSubModules/*.o* ../Modules/BCSubModules/.*.o* ../Modules/HWMSubModules/*.o* ../Modules/HWMSubModules/.*.o* ../Modules/I2CSubModules/*.o* ../Modules/I2CSubModules/.*.o* ../Modules/IOSubModules/*.o* ../Modules/IOSubModules/.*.o* ../Modules/StoSubModules/*.o* ../Modules/StoSubModules/.*.o* ../Modules/VgaSubModules/*.o* ../Modules/VgaSubModules/.*.o* ../Modules/WDSubModules/*.o* ../Modules/WDSubModules/.*.o*
+ 
+ install:
+-	install -m 644 -o root -g root cgosdrv.ko /lib/modules/`uname -r`/kernel/drivers/misc
++	$(MAKE) -C $(KERNELDIR) M=$(PWD) INSTALL_MOD_PATH=$(KERNELINST) modules_install
+ 
+ 
+diff --git a/CgosDump/Lx/Makefile b/CgosDump/Lx/Makefile
+index 5c0d351..da31a62 100755
+--- a/CgosDump/Lx/Makefile
++++ b/CgosDump/Lx/Makefile
+@@ -1,10 +1,10 @@
+ PROJECT_INC = -I. -I.. -I../.. -I../../CgosLib
+ PROJECT_LIB = -lcgos -L../../CgosLib/Lx
+ C_source = ../CgosDump.c
+-OPT = -Wall
++OPT = -Wall $(TARGET_LDFLAGS)
+ 
+ default:
+-	gcc  $(C_source) -o cgosdump $(OPT) $(DEF) $(PROJECT_INC) $(PROJECT_LIB)
++	$(CC)  $(C_source) -o cgosdump $(OPT) $(DEF) $(PROJECT_INC) $(PROJECT_LIB)
+ 
+ clean:
+ 	rm -f cgosdump
+diff --git a/CgosLib/Lx/Makefile b/CgosLib/Lx/Makefile
+index 01c7187..ba07412 100755
+--- a/CgosLib/Lx/Makefile
++++ b/CgosLib/Lx/Makefile
+@@ -6,10 +6,10 @@ DEF = -DUNIX
+ OPT = -Wall -fPIC
+ 
+ default: $(C_source) libcgosp.o
+-	gcc -shared -o libcgos.so $(OPT) $(DEF) $(PROJECT_INC) $(C_source) libcgosp.o
++	$(CC) -shared -o libcgos.so $(OPT) $(DEF) $(PROJECT_INC) $(C_source) libcgosp.o
+ 
+ libcgosp.o:
+-	gcc -Wl,-r -no-pie -nostdlib -o libcgosp.o $(OPT) $(DEF) $(PROJECT_INC) $(C_source_p)
++	$(CC) -Wl,-r -no-pie -nostdlib -o libcgosp.o $(OPT) $(DEF) $(PROJECT_INC) $(C_source_p)
+ 
+ clean:
+ 	rm -f *.so *.o
+diff --git a/CgosMon/Lx/Makefile b/CgosMon/Lx/Makefile
+index 4c207a0..bc71c0c 100755
+--- a/CgosMon/Lx/Makefile
++++ b/CgosMon/Lx/Makefile
+@@ -4,7 +4,7 @@ C_source = ../CgosMon.c
+ OPT = -Wall
+ 
+ default:
+-	gcc $(C_source) -o cgosmon $(OPT) $(DEF) $(PROJECT_INC) $(PROJECT_LIB)
++	$(CC) $(C_source) -o cgosmon $(OPT) $(DEF) $(PROJECT_INC) $(PROJECT_LIB)
+ 
+ clean:
+ 	rm -f cgosmon
+diff --git a/Makefile b/Makefile
+index 5b92c80..bef1719 100755
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,5 @@
+-ALLDIRS = CgosDrv CgosLib CgosDump CgosMon CgosTest
++APPDIRS = CgosLib CgosDump CgosMon CgosTest
++MODDIRS = CgosDrv
+ 
+ # Determination of the target system
+ target = $(shell uname)
+@@ -10,7 +11,7 @@ ifdef target
+  endif
+ endif
+ 
+-M = for i in $(ALLDIRS); do make -C $$i/$(sysdir)
++M = for i in $(APPDIRS); do make -C $$i/$(sysdir)
+ N = || exit 1; done
+ 
+ ifeq ("$(target)","QNX")
+@@ -22,16 +23,23 @@ install:
+ 	cp CgosTest/$(sysdir)/cgostest /usr/lib
+ else
+ 
+-default:
++default: app mod
++app:
+ 	$(M) $(N)
+ 
+-install:
+-	install -m 755 -o root -g root CgosDump/$(sysdir)/cgosdump /usr/bin
+-	install -m 755 -o root -g root CgosMon/$(sysdir)/cgosmon /usr/bin
+-	install -m 755 -o root -g root CgosTest/$(sysdir)/cgostest /usr/bin
+-	install -m 755 -o root -g root CgosLib/$(sysdir)/libcgos.so /usr/lib
+-	install -m 644 -o root -g root CgosDrv/$(sysdir)/cgosdrv.ko /lib/modules/`uname -r`/kernel/drivers/misc 
+-	depmod -a
++mod:
++	$(MAKE) -C $(MODDIRS)/$(sysdir)
++
++install: install_app install_mod
++install_app:
++	install -d $(INST_BIN)
++	install -m 755 -o root -g root CgosDump/$(sysdir)/cgosdump $(INST_BIN)
++	install -m 755 -o root -g root CgosMon/$(sysdir)/cgosmon $(INST_BIN)
++	install -d $(INST_LIB)
++	install -m 755 -o root -g root CgosLib/$(sysdir)/libcgos.so $(INST_LIB)
++
++install_mod:
++	$(MAKE) -C $(MODDIRS)/$(sysdir) install
+ 
+ # copy the udev rules to /lib/udev/rules.d - but only if the file does not already exist
+ 	@if ! [ -e /lib/udev/rules.d/99-cgos.rules ]; \
+@@ -52,7 +60,7 @@ install:
+ 		cp cgos.conf /usr/lib/modules-load.d/cgos.conf; \
+ 		echo "Added cgos.conf to /usr/lib/modules-load.d for cgosdrv module insertion at system startup."; \
+ 	fi
+-	
++
+ clean:
+ 	$(M) $@ $(N)
+ 

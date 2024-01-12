@@ -1,0 +1,36 @@
+From 053b5ff10a3cffc5fb1b43ca112e4f180f840485 Mon Sep 17 00:00:00 2001
+From: Jan Janson <jan.janson@congatec.com>
+Date: Wed, 7 Apr 2021 14:58:28 +0200
+Subject: [PATCH] gatesgarth release
+
+---
+ cgutlcmd/Makefile | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/cgutlcmd/Makefile b/cgutlcmd/Makefile
+index 89ce9ea..bf11ea2 100644
+--- a/cgutlcmd/Makefile
++++ b/cgutlcmd/Makefile
+@@ -1,15 +1,19 @@
++ifndef CC
++CC = gcc
++endif
++
+ PROJECT_INC = -I. -I.. -I../.. -I../cgutlcmn
+ PROJECT_LIB = -lcgos -lm -L./
+ C_source = cgutlcmd.c 
+ C_sourcep = bcprgcmd.c biosmodules.c biosupdate.c boardinfo.c firmwareupdate.c panelconfig.c ../cgutlcmn/bcprgcmn.c ../cgutlcmn/biosflsh.c ../cgutlcmn/cgepi.c ../cgutlcmn/cginfo.c ../cgutlcmn/cgmpfa.c ../cgutlcmn/cgutlcmn.c ../cgutlcmn/dmstobin.c
+-OPT = -Wall -Wno-multichar
++OPT = -Wall -Wno-multichar $(TARGET_LDFLAGS)
+ DEF = -D"CONGA" -D"LINUX"
+ 
+ default: libcgutlp.o
+-	gcc  $(C_source) -o cgutlcmd libcgutlp.o $(OPT) $(DEF) $(PROJECT_INC) $(PROJECT_LIB)
++	$(CC)  $(C_source) -o cgutlcmd libcgutlp.o $(OPT) $(DEF) $(PROJECT_INC) $(PROJECT_LIB)
+ 
+ libcgutlp.o:
+-	gcc -Wl,-r -no-pie -nostdlib $(C_sourcep) -o libcgutlp.o $(OPT) $(DEF) $(PROJECT_INC) 
++	$(CC) -Wl,-r -no-pie -nostdlib $(C_sourcep) -o libcgutlp.o $(OPT) $(DEF) $(PROJECT_INC) 
+ 
+ clean:
+ 	rm -f cgutlcmd *.so *.o
