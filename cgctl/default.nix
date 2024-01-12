@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Congatec OS API (CGOS) user-land utility";
+    homepage = "https://github.com/serpent213/congatec-cgos-nixos";
+    license = lib.licenses.publicDomain;
     maintainers = []; # TODO: add maintainers
   };
 }
