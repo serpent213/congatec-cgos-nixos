@@ -2,7 +2,7 @@
  *
  * Some practical Congatec CGOS functionality (Linux only)
  *
- * 2023 Steffen Beyer
+ * 2024 Steffen Beyer
  *
  * License: Public Domain
  *
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
 
 void doHelp() {
     printf(
-        "Usage: cgctl <command> [option]\n"
+        "Usage: cgctl <command> [<options>]\n"
         "\n"
         "Commands:\n"
         "\n"
@@ -227,26 +227,25 @@ void reportTemperatures(json_t *root) {
 }
 
 void reportVoltages(json_t *root) {
-  CGOSVOLTAGEINFO voltageInfo = {0};
-  voltageInfo.dwSize = sizeof(voltageInfo);
-  unsigned int dwUnit, setting, status;
-  unsigned int monCount = CgosVoltageCount(hCgos);
-  json_t *voltageData = json_object();
-  
-  if (monCount > 0) {
-      for (dwUnit = 0; dwUnit < monCount; dwUnit++) {
-          if (CgosVoltageGetInfo(hCgos, dwUnit, &voltageInfo)) {
-              if (voltageInfo.dwType == CGOS_VOLTAGE_5V_S0 && CgosVoltageGetCurrent(hCgos, dwUnit, &setting, &status)) {
-                  json_t *voltageJSON = json_real((double)setting / 1000.0);
-                  json_object_set_new(voltageData, "5V_S0", voltageJSON);
-              } else if (voltageInfo.dwType == CGOS_VOLTAGE_5V_S5 && CgosVoltageGetCurrent(hCgos, dwUnit, &setting, &status)) {
-                  json_t *voltageJSON = json_real((double)setting / 1000.0);
-                  json_object_set_new(voltageData, "5V_S5", voltageJSON);
-              }
-          }
-      }
-  }
+    CGOSVOLTAGEINFO voltageInfo = {0};
+    voltageInfo.dwSize = sizeof(voltageInfo);
+    unsigned int dwUnit, setting, status;
+    unsigned int monCount = CgosVoltageCount(hCgos);
+    json_t *voltageData = json_object();
 
-  json_object_set_new(root, "Voltages", voltageData);
+    if (monCount > 0) {
+        for (dwUnit = 0; dwUnit < monCount; dwUnit++) {
+            if (CgosVoltageGetInfo(hCgos, dwUnit, &voltageInfo)) {
+                if (voltageInfo.dwType == CGOS_VOLTAGE_5V_S0 && CgosVoltageGetCurrent(hCgos, dwUnit, &setting, &status)) {
+                    json_t *voltageJSON = json_real((double)setting / 1000.0);
+                    json_object_set_new(voltageData, "5V_S0", voltageJSON);
+                } else if (voltageInfo.dwType == CGOS_VOLTAGE_5V_S5 && CgosVoltageGetCurrent(hCgos, dwUnit, &setting, &status)) {
+                    json_t *voltageJSON = json_real((double)setting / 1000.0);
+                    json_object_set_new(voltageData, "5V_S5", voltageJSON);
+                }
+            }
+        }
+    }
+
+    json_object_set_new(root, "Voltages", voltageData);
 }
-
