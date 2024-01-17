@@ -1,19 +1,24 @@
 # Congatec x86 BSP/CGOS for NixOS
 
 *[Congatec](https://www.congatec.com)* embedded modules contain a board controller
-that offers access to a multistage watchdog, non-volatile user data storage,
+(cBC) that offers access to a multistage watchdog, non-volatile user data storage,
 manufacturing and board information, board statistics and sensors, I²C bus and GPIO.
 
-This repo contains an example NixOS configuration flake that includes four packages:
+This repo contains an example NixOS configuration flake that includes five packages.
+Ported from the official BSP:
 
 * cgos-mod: Kernel driver for the board controller
 * cgos: C library and basic utilities (`cgosdump`, `cgosmon`)
 * cgos-util: Congatec System Utility (`cgutlcmd` – could not make any use of it)
+
+Based on `cgos-mod` and `cgos`, my own additions:
+
 * cgos-cgctl: Small custom utility for my use case (board information, watchdog)
+* cgos-cgexporter: Prometheus exporter for hardware monitoring
 
 My developement hardware is a *Pascom* labeled
 [*EFCO U7-130*](https://www.efcotec.com/Product/smartsl-33340?category=8) embedded
-computer featuring a *[Congatec](https://www.congatec.com) Qseven conga-QA5* compute
+computer featuring a *Congatec Qseven conga-QA3* compute
 module (AFAIK).
 
 ![EFCO U7-130 development system](docs/dev_hardware.jpg)
@@ -23,6 +28,7 @@ module (AFAIK).
 * Boot NixOS installer from USB and follow manual
 * Clone this repo and run `nixos-rebuild switch --flake .#conga`
 * After reboot try running `cgosdump`, `cgosmon` or `cgctl info`
+* Exporter endpoint is http://127.0.0.1:9699
 
 ## Example output
 
@@ -237,16 +243,59 @@ Commands:
                     -j    Output in JSON format (default)
 ```
 
+### curl -v http://localhost:9699
+
+```
+*   Trying [::1]:9699...
+* connect to ::1 port 9699 failed: Connection refused
+*   Trying 127.0.0.1:9699...
+* Connected to localhost (127.0.0.1) port 9699
+> GET / HTTP/1.1
+> Host: localhost:9699
+> User-Agent: curl/8.4.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Connection: close
+< Content-Length: 662
+< Content-Type: text/plain; version=0.0.4
+< Date: Wed, 17 Jan 2024 17:25:57 GMT
+< 
+# HELP congatec_boot_counter Number of system boots
+# TYPE congatec_boot_counter counter
+congatec_boot_counter 61
+
+# HELP congatec_operating_hours Number of operating hours
+# TYPE congatec_operating_hours counter
+congatec_operating_hours 270
+
+# HELP congatec_temp_celsius Hardware monitor for temperature
+# TYPE congatec_temp_celsius gauge
+congatec_temp_celsius{name="Board"} 45.500
+
+# HELP congatec_voltage_volts Hardware monitor for voltage
+# TYPE congatec_voltage_volts gauge
+congatec_voltage_volts{name="5V_S0"} 5.070
+
+# HELP congatec_voltage_volts Hardware monitor for voltage
+# TYPE congatec_voltage_volts gauge
+congatec_voltage_volts{name="5V_S5"} 5.090
+
+* Closing connection
+```
+
 ## Notes
 
 * The original `cgosmon` does not display decimal numbers (like voltage) correctly
   in all cases (compare with `cgctl` output above).
 
-* `cgctl` is a bespoke tool for my use case. It may act funny with other system
-  configurations, but it should also be easy to patch to meet your needs.
+* `cgctl` and `cgexporter` are bespoke tools for my use case (and this specific
+  compute module). They may act funny with other system configurations, but they
+  should also be easy to patch to meet your needs.
 
 * The watchdog's *ACPI Restart* event was received by the kernel but resulted in
-  `ACPI: OSL: Fatal opcode executed`. Plain reset works fine.
+  `ACPI: OSL: Fatal opcode executed`, `acpi_listen` does not catch the event. Plain
+  reset works fine.
 
 ## Further reading
 

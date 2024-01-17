@@ -8,6 +8,7 @@ let
   cgos = pkgs.callPackage ./cgos/cgos.nix {};
   cgos-util = pkgs.callPackage ./cgos/util.nix { inherit cgos; };
   cgos-cgctl = pkgs.callPackage ../cgctl { inherit cgos; };
+  cgos-cgexporter = pkgs.callPackage ../cgexporter { inherit cgos; };
 in
 {
   imports =
@@ -55,6 +56,35 @@ in
     cgos-util
     cgos-cgctl
   ];
+
+  systemd.services = {
+    congatec-exporter = {
+      description = "Prometheus exporter for Congatec hardware monitor";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStart = "${cgos-cgexporter}/bin/cgexporter";
+
+        # Hardening
+        DeviceAllow = "/dev/cgos rw";
+        CapabilityBoundingSet = "CAP_SETUID CAP_SETGID";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        MemoryDenyWriteExecute = true;
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = "AF_INET";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+      };
+    };
+  };
 
   services = {
     udev.extraRules = ''
